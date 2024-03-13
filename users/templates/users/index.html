@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<div style="text-align:center; align-items:center; justify-content: center; display: flex; height: 100vh;">
+  <div style="width: 70%;">
+
+{% block subject %}
+
+{% endblock subject %}
+
+{% block text_body %}
+
+
+
+<i>{% blocktrans %}{% endblocktrans %}</i>
+
+{% endblock text_body %}
+
+{% block html_body %}
+<p style="font-size: 46px; font-weight: bold;">{% blocktrans %} Check out all our various APIs.{% endblocktrans %}</p>
+
+
+<p style="margin-bottom:100px"><a style="display: inline-block; font-weight: bold; padding: 16px 32px; border-radius: 8px; background: linear-gradient(135deg, #1F1053 12.95%, #0A1F79 49.12%, #5D05C8 87.71%); color: white; text-decoration: none;" href="{{ domain }}/api/schema/docs/">DOCUMENTATION</a></p>
+<p style="margin-bottom:100px"><a style="display: inline-block; font-weight: bold; padding: 16px 32px; border-radius: 8px; background: linear-gradient(135deg, #1F1053 12.95%, #0A1F79 49.12%, #5D05C8 87.71%); color: white; text-decoration: none;" href="{{ domain }}/api/auth">User Auth API test</a></p>
+<p style="margin-bottom:100px"><a style="display: inline-block; font-weight: bold; padding: 16px 32px; border-radius: 8px; background: linear-gradient(135deg, #1F1053 12.95%, #0A1F79 49.12%, #5D05C8 87.71%); color: white; text-decoration: none;" href="{{ domain }}/api/blog/">Blog API test</a></p>
+<p style="margin-bottom:100px"><a style="display: inline-block; font-weight: bold; padding: 16px 32px; border-radius: 8px; background: linear-gradient(135deg, #1F1053 12.95%, #0A1F79 49.12%, #5D05C8 87.71%); color: white; text-decoration: none;" href="{{ domain }}/api/testimonial/">Testimoial API test</a></p>
+
+
+
+
+
+{% endblock html_body %}
+</div>
+</div>

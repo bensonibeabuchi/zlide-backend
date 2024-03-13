@@ -1,0 +1,1133 @@
+openapi: 3.0.3
+info:
+  title: Zlide
+  version: 1.0.0
+  description: A web-based software solution designed to streamline the process of
+    creating PowerPoint presentations using AI
+paths:
+  /api/auth/jwt/create/:
+    post:
+      operationId: auth_jwt_create_create
+      description: |-
+        This endpoint Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/auth/jwt/refresh/:
+    post:
+      operationId: auth_jwt_refresh_create
+      description: |-
+        This Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/auth/jwt/verify/:
+    post:
+      operationId: auth_jwt_verify_create
+      description: This endpoint takes a token and indicates if it is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenVerify'
+          description: ''
+  /api/auth/o/{provider}/:
+    get:
+      operationId: auth_o_retrieve
+      description: This endpoint is to get Google OAuth2/Facebook Authorization url.
+      parameters:
+      - in: path
+        name: provider
+        schema:
+          type: string
+          pattern: ^\S+$
+        required: true
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAuth'
+          description: ''
+    post:
+      operationId: auth_o_create
+      description: This endpoint is to Login using Google OAuth2/Facebook Authorization
+        url..
+      parameters:
+      - in: path
+        name: provider
+        schema:
+          type: string
+          pattern: ^\S+$
+        required: true
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderAuth'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProviderAuth'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProviderAuth'
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAuth'
+          description: ''
+  /api/auth/users/:
+    get:
+      operationId: auth_users_list
+      description: Uset list of users
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserCreate'
+          description: ''
+    post:
+      operationId: auth_users_create
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreatePasswordRetype'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreatePasswordRetype'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreatePasswordRetype'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreatePasswordRetype'
+          description: ''
+  /api/auth/users/{id}/:
+    get:
+      operationId: auth_users_retrieve
+      description: Testing the mic
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    put:
+      operationId: auth_users_update
+      description: Testing the mic
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    patch:
+      operationId: auth_users_partial_update
+      description: Testing the mic
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    delete:
+      operationId: auth_users_destroy
+      description: Testing the mic
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/auth/users/activation/:
+    post:
+      operationId: auth_users_activation_create
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Activation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Activation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Activation'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activation'
+          description: ''
+  /api/auth/users/me/:
+    get:
+      operationId: auth_users_me_retrieve
+      description: Testing the mic
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    put:
+      operationId: auth_users_me_update
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    patch:
+      operationId: auth_users_me_partial_update
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    delete:
+      operationId: auth_users_me_destroy
+      description: Testing the mic
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/auth/users/resend_activation/:
+    post:
+      operationId: auth_users_resend_activation_create
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /api/auth/users/reset_email/:
+    post:
+      operationId: auth_users_reset_email_create
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /api/auth/users/reset_email_confirm/:
+    post:
+      operationId: auth_users_reset_email_confirm_create
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameResetConfirm'
+          description: ''
+  /api/auth/users/reset_password/:
+    post:
+      operationId: auth_users_reset_password_create
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /api/auth/users/reset_password_confirm/:
+    post:
+      operationId: auth_users_reset_password_confirm_create
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRetype'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRetype'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRetype'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetConfirmRetype'
+          description: ''
+  /api/auth/users/set_email/:
+    post:
+      operationId: auth_users_set_email_create
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetUsernameRetype'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetUsernameRetype'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetUsernameRetype'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetUsernameRetype'
+          description: ''
+  /api/auth/users/set_password/:
+    post:
+      operationId: auth_users_set_password_create
+      description: Testing the mic
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPasswordRetype'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetPasswordRetype'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetPasswordRetype'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPasswordRetype'
+          description: ''
+  /api/blog/:
+    get:
+      operationId: list_blog_posts
+      description: This endpoint lists all the blog in the database
+      tags:
+      - blog
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+    post:
+      operationId: create_blog_post
+      description: This endpoint creates a blog and saves it in the database
+      tags:
+      - blog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Blog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+  /api/blog/{slug}/:
+    get:
+      operationId: retrieve_single_blog_post
+      description: This endpoint retrieves a single blog post from the database using
+        slug as the unique identifier
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - blog
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+    put:
+      operationId: update_single_blog_post
+      description: This endpoint updates a single blog post from the database using
+        slug as the unique identifier
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - blog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Blog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+    delete:
+      operationId: delete_single_blog_post
+      description: This endpoint deletes a single blog post from the database using
+        slug as the unique identifier
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - blog
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/testimonial/:
+    get:
+      operationId: list_testimonials
+      description: This endpoint lists all the Testimonial in the database
+      tags:
+      - testimonial
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Testimonial'
+          description: ''
+    post:
+      operationId: create_testimonials
+      description: This endpoint creates a new testimonial and saves it in the database
+      tags:
+      - testimonial
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Testimonial'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Testimonial'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Testimonial'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Testimonial'
+          description: ''
+  /api/testimonial/{id}/:
+    get:
+      operationId: retrieve_single_testimonial
+      description: This endpoint retrieves a single Testimonial from the database
+        using id as the unique identifier
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testimonial
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Testimonial'
+          description: ''
+    put:
+      operationId: update_single_testimonial
+      description: This endpoint updates a testimonial from the database using id
+        as the unique identifier
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testimonial
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Testimonial'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Testimonial'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Testimonial'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Testimonial'
+          description: ''
+    delete:
+      operationId: delete_single_testimonial
+      description: This endpoint deletes a single testimonial from the database using
+        id as the unique identifier
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testimonial
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Activation:
+      type: object
+      properties:
+        uid:
+          type: string
+        token:
+          type: string
+      required:
+      - token
+      - uid
+    Blog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+          nullable: true
+        image:
+          type: string
+          format: uri
+          nullable: true
+        slug:
+          type: string
+          maxLength: 1000
+          pattern: ^[-a-zA-Z0-9_]+$
+        date_posted:
+          type: string
+          format: date
+          readOnly: true
+        author:
+          type: integer
+          nullable: true
+      required:
+      - date_posted
+      - id
+      - slug
+      - title
+    PasswordResetConfirmRetype:
+      type: object
+      properties:
+        uid:
+          type: string
+        token:
+          type: string
+        new_password:
+          type: string
+        re_new_password:
+          type: string
+      required:
+      - new_password
+      - re_new_password
+      - token
+      - uid
+    PatchedUserCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+        password:
+          type: string
+          writeOnly: true
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        job_title:
+          type: string
+          nullable: true
+          maxLength: 255
+        company:
+          type: string
+          nullable: true
+          title: Company name
+          maxLength: 255
+    ProviderAuth:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+        user:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+      - user
+    RatingEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
+      description: |-
+        * `1` - 1
+        * `2` - 2
+        * `3` - 3
+        * `4` - 4
+        * `5` - 5
+    SendEmailReset:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    SetPasswordRetype:
+      type: object
+      properties:
+        new_password:
+          type: string
+        re_new_password:
+          type: string
+        current_password:
+          type: string
+      required:
+      - current_password
+      - new_password
+      - re_new_password
+    SetUsernameRetype:
+      type: object
+      properties:
+        current_password:
+          type: string
+        new_email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+        re_new_email:
+          type: string
+      required:
+      - current_password
+      - new_email
+      - re_new_email
+    Testimonial:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          type: string
+          nullable: true
+          maxLength: 255
+        review:
+          type: string
+        rating:
+          allOf:
+          - $ref: '#/components/schemas/RatingEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        created_date:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_date:
+          type: string
+          format: date-time
+          readOnly: true
+        author:
+          type: integer
+          nullable: true
+      required:
+      - created_date
+      - id
+      - rating
+      - review
+      - updated_date
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - email
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenVerify:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+      required:
+      - token
+    UserCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+        password:
+          type: string
+          writeOnly: true
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        job_title:
+          type: string
+          nullable: true
+          maxLength: 255
+        company:
+          type: string
+          nullable: true
+          title: Company name
+          maxLength: 255
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+    UserCreatePasswordRetype:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        job_title:
+          type: string
+          nullable: true
+          maxLength: 255
+        company:
+          type: string
+          nullable: true
+          title: Company name
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+        re_password:
+          type: string
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+      - re_password
+    UsernameResetConfirm:
+      type: object
+      properties:
+        new_email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+      required:
+      - new_email
+  securitySchemes:
+    jwtAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"

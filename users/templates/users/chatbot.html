@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Write an instruction</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="texxt" class="form-control" name="user_input"/>
+        <button type="submit" class="btn btn-primary">Submit</button>    
+    </form>
+
+    {% if chatbot_response %}
+    <div>
+        {{ chatbot_response|safe}}
+    </div>
+</body>
+</html>

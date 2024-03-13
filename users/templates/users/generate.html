@@ -1,0 +1,19 @@
+<!-- generate_ppt.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate PowerPoint</title>
+</head>
+<body>
+    <h1>Generate PowerPoint</h1>
+    <form action="{% url 'generate' %}" method="post">
+        {% csrf_token %}
+        <label for="prompt">Enter Prompt:</label>
+        <input type="text" id="prompt" name="prompt">
+        <button type="submit">Generate PowerPoint</button>
+    </form>
+</body>
+</html>
