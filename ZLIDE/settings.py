@@ -201,11 +201,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:5174",
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:5174",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -223,7 +228,6 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 DOMAIN = 'localhost:3000'
 SITE_NAME = 'Zlide'
-
 
 
 DJOSER = {
