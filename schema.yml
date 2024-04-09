@@ -144,7 +144,6 @@ paths:
   /api/auth/users/:
     get:
       operationId: auth_users_list
-      description: Uset list of users
       tags:
       - auth
       security:
@@ -160,7 +159,6 @@ paths:
           description: ''
     post:
       operationId: auth_users_create
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -188,7 +186,6 @@ paths:
   /api/auth/users/{id}/:
     get:
       operationId: auth_users_retrieve
-      description: Testing the mic
       parameters:
       - in: path
         name: id
@@ -209,7 +206,6 @@ paths:
           description: ''
     put:
       operationId: auth_users_update
-      description: Testing the mic
       parameters:
       - in: path
         name: id
@@ -242,7 +238,6 @@ paths:
           description: ''
     patch:
       operationId: auth_users_partial_update
-      description: Testing the mic
       parameters:
       - in: path
         name: id
@@ -274,7 +269,6 @@ paths:
           description: ''
     delete:
       operationId: auth_users_destroy
-      description: Testing the mic
       parameters:
       - in: path
         name: id
@@ -292,7 +286,6 @@ paths:
   /api/auth/users/activation/:
     post:
       operationId: auth_users_activation_create
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -320,7 +313,6 @@ paths:
   /api/auth/users/me/:
     get:
       operationId: auth_users_me_retrieve
-      description: Testing the mic
       tags:
       - auth
       security:
@@ -334,7 +326,6 @@ paths:
           description: ''
     put:
       operationId: auth_users_me_update
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -360,7 +351,6 @@ paths:
           description: ''
     patch:
       operationId: auth_users_me_partial_update
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -385,7 +375,6 @@ paths:
           description: ''
     delete:
       operationId: auth_users_me_destroy
-      description: Testing the mic
       tags:
       - auth
       security:
@@ -396,7 +385,6 @@ paths:
   /api/auth/users/resend_activation/:
     post:
       operationId: auth_users_resend_activation_create
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -424,7 +412,6 @@ paths:
   /api/auth/users/reset_email/:
     post:
       operationId: auth_users_reset_email_create
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -452,7 +439,6 @@ paths:
   /api/auth/users/reset_email_confirm/:
     post:
       operationId: auth_users_reset_email_confirm_create
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -480,7 +466,6 @@ paths:
   /api/auth/users/reset_password/:
     post:
       operationId: auth_users_reset_password_create
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -508,7 +493,6 @@ paths:
   /api/auth/users/reset_password_confirm/:
     post:
       operationId: auth_users_reset_password_confirm_create
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -536,7 +520,6 @@ paths:
   /api/auth/users/set_email/:
     post:
       operationId: auth_users_set_email_create
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -563,7 +546,6 @@ paths:
   /api/auth/users/set_password/:
     post:
       operationId: auth_users_set_password_create
-      description: Testing the mic
       tags:
       - auth
       requestBody:
@@ -595,6 +577,7 @@ paths:
       - blog
       security:
       - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -643,6 +626,7 @@ paths:
       - blog
       security:
       - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -700,14 +684,184 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/presentation/generate-slides/:
+    get:
+      operationId: List Slides
+      description: This endpoint gets ALL the slides from the database for now
+      summary: This endpoint gets ALL the slides from the database for now
+      tags:
+      - presentation
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zlide'
+          description: ''
+    post:
+      operationId: Create Slides
+      description: This endpoint takes in user_input and gives out a json file containing
+        the slide information
+      summary: This endpoint takes in user_input and gives out a json file containing
+        the slide information
+      parameters:
+      - in: query
+        name: user_input
+        schema:
+          type: string
+        description: User input for generating slides
+        required: true
+      tags:
+      - presentation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              additionalProperties: {}
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zlide'
+          description: ''
+  /api/presentation/zlide/{id}/:
+    get:
+      operationId: Retrieve a Zlide object by its ID
+      description: Retrieve a Zlide object by its ID
+      summary: Retrieve a Zlide object by its ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zlide'
+          description: ''
+    put:
+      operationId: Update an entire Zlide object
+      description: Update an entire Zlide object by its ID.
+      summary: Update an entire Zlide object by its ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zlide'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Zlide'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Zlide'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zlide'
+          description: ''
+    patch:
+      operationId: Update a Zlide object
+      description: Update a Zlide object by its ID.
+      summary: Update a Zlide object by its ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedZlide'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedZlide'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedZlide'
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zlide'
+          description: ''
+    delete:
+      operationId: Delete a Zlide object
+      description: Delete a Zlide object by its ID.
+      summary: Delete a Zlide object by its ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zlide'
+          description: ''
   /api/testimonial/:
     get:
-      operationId: list_testimonials
+      operationId: List Testimonials
       description: This endpoint lists all the Testimonial in the database
+      summary: This endpoint lists all the Testimonial in the database
       tags:
       - testimonial
       security:
       - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -716,22 +870,38 @@ paths:
                 $ref: '#/components/schemas/Testimonial'
           description: ''
     post:
-      operationId: create_testimonials
+      operationId: Create Testimonials
       description: This endpoint creates a new testimonial and saves it in the database
+      summary: This endpoint creates a new testimonial and saves it in the database
+      parameters:
+      - in: query
+        name: rating
+        schema:
+          type: string
+        description: User Rating
+        required: true
+      - in: query
+        name: review
+        schema:
+          type: string
+        description: User Review
+        required: true
       tags:
       - testimonial
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Testimonial'
+              type: object
+              additionalProperties: {}
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Testimonial'
+              type: object
+              additionalProperties: {}
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Testimonial'
-        required: true
+              type: object
+              additionalProperties: {}
       security:
       - jwtAuth: []
       responses:
@@ -756,6 +926,7 @@ paths:
       - testimonial
       security:
       - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -836,11 +1007,9 @@ components:
           maxLength: 255
         content:
           type: string
-          nullable: true
         image:
           type: string
           format: uri
-          nullable: true
         slug:
           type: string
           maxLength: 1000
@@ -851,8 +1020,9 @@ components:
           readOnly: true
         author:
           type: integer
-          nullable: true
       required:
+      - author
+      - content
       - date_posted
       - id
       - slug
@@ -895,13 +1065,22 @@ components:
           maxLength: 255
         job_title:
           type: string
-          nullable: true
           maxLength: 255
         company:
           type: string
-          nullable: true
           title: Company name
           maxLength: 255
+    PatchedZlide:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        presentation_data: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
     ProviderAuth:
       type: object
       properties:
@@ -975,10 +1154,6 @@ components:
         id:
           type: integer
           readOnly: true
-        subject:
-          type: string
-          nullable: true
-          maxLength: 255
         review:
           type: string
         rating:
@@ -1064,17 +1239,17 @@ components:
           maxLength: 255
         job_title:
           type: string
-          nullable: true
           maxLength: 255
         company:
           type: string
-          nullable: true
           title: Company name
           maxLength: 255
       required:
+      - company
       - email
       - first_name
       - id
+      - job_title
       - last_name
       - password
     UserCreatePasswordRetype:
@@ -1088,11 +1263,9 @@ components:
           maxLength: 255
         job_title:
           type: string
-          nullable: true
           maxLength: 255
         company:
           type: string
-          nullable: true
           title: Company name
           maxLength: 255
         email:
@@ -1109,9 +1282,11 @@ components:
         re_password:
           type: string
       required:
+      - company
       - email
       - first_name
       - id
+      - job_title
       - last_name
       - password
       - re_password
@@ -1125,6 +1300,21 @@ components:
           maxLength: 255
       required:
       - new_email
+    Zlide:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        presentation_data: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - presentation_data
   securitySchemes:
     jwtAuth:
       type: apiKey

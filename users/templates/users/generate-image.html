@@ -1,0 +1,24 @@
+<!-- generate_ppt.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate image</title>
+</head>
+<body>
+    <h1>Generate image</h1>
+    <form action="{% url 'generate-image' %}" method="post">
+        {% csrf_token %}
+        <label for="user_input">Generate image:</label>
+        <input type="text" id="user_input" name="user_input">
+        <button type="submit">Generate image</button>
+    </form>
+    {% if response %}
+    <div>
+        {{ response|safe}}
+    </div>
+    {% endif %}
+</body>
+</html>

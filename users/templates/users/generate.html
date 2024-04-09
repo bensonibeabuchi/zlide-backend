@@ -11,8 +11,8 @@
     <h1>Generate PowerPoint</h1>
     <form action="{% url 'generate' %}" method="post">
         {% csrf_token %}
-        <label for="prompt">Enter Prompt:</label>
-        <input type="text" id="prompt" name="prompt">
+        <label for="user_input">Enter Prompt:</label>
+        <input type="text" id="user_input" name="user_input">
         <button type="submit">Generate PowerPoint</button>
     </form>
 </body>

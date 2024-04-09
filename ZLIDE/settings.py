@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '206.81.1.125']
 
 
 # Application definition
@@ -92,6 +92,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ZLIDE.wsgi.application'
 
 
+# #Digital Ocean Database
+# DATABASES = {
+
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'newdb',
+#         'USER': 'newuser',
+#         'PASSWORD': 'newpassword',
+#         'HOST': 'localhost',
+#         'PORT': ''
+#     }
+# }
 
 # Local Database, use when you want to work locally
 
@@ -187,7 +199,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
