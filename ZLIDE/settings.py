@@ -107,51 +107,32 @@ WSGI_APPLICATION = 'ZLIDE.wsgi.application'
 
 # Local Database, use when you want to work locally
 
-# DATABASES = {
-
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': config('POSTGRESS_USERNAME'),
-#         'USER': 'postgres',
-#         'PASSWORD': config('POSTGRESS_PASSWORD'),
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
-
-
-# Railway Database, use when you want to push to the web
-
 DATABASES = {
+
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway',
+        'NAME': config('POSTGRESS_USERNAME'),
         'USER': 'postgres',
-        'PASSWORD': config('PASSWORD'),
-        'HOST': config('RAILWAY_HOST'),
-        'PORT': config('PORT'),
+        'PASSWORD': config('POSTGRESS_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
 
+# Railway Database, use when you want to push to the web
 
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': config('PASSWORD'),
+#         'HOST': config('RAILWAY_HOST'),
+#         'PORT': config('PORT'),
+#     }
+# }
 
-# AUTH_PASSWORD_VALIDATORS = [
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-#     },
-# ]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -239,7 +220,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
-DOMAIN = 'localhost:3000'
+DOMAIN = 'localhost:5174'
 SITE_NAME = 'Zlide'
 
 

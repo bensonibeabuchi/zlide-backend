@@ -86,8 +86,11 @@ paths:
           description: ''
   /api/auth/o/{provider}/:
     get:
-      operationId: auth_o_retrieve
-      description: This endpoint is to get Google OAuth2/Facebook Authorization url.
+      operationId: This endpoint is used to GET Google OAuth2/Facebook Authorization
+        url
+      description: This endpoint is used to GET Google OAuth2/Facebook Authorization
+        url
+      summary: This endpoint is used to GET Google OAuth2/Facebook Authorization url
       parameters:
       - in: path
         name: provider
@@ -109,8 +112,6 @@ paths:
           description: ''
     post:
       operationId: auth_o_create
-      description: This endpoint is to Login using Google OAuth2/Facebook Authorization
-        url..
       parameters:
       - in: path
         name: provider
@@ -285,7 +286,9 @@ paths:
           description: No response body
   /api/auth/users/activation/:
     post:
-      operationId: auth_users_activation_create
+      operationId: User Activation
+      description: This endpoint is used for user activation
+      summary: This endpoint is used for user activation
       tags:
       - auth
       requestBody:
@@ -308,11 +311,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Activation'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/auth/users/me/:
     get:
-      operationId: auth_users_me_retrieve
+      operationId: Get a single user details
+      description: Get a single user details
+      summary: Get a single user details
       tags:
       - auth
       security:
@@ -325,7 +330,9 @@ paths:
                 $ref: '#/components/schemas/UserCreate'
           description: ''
     put:
-      operationId: auth_users_me_update
+      operationId: Edit a single user details
+      description: Edit a single user details
+      summary: Edit a single user details
       tags:
       - auth
       requestBody:
@@ -350,7 +357,9 @@ paths:
                 $ref: '#/components/schemas/UserCreate'
           description: ''
     patch:
-      operationId: auth_users_me_partial_update
+      operationId: Edit partially a single user details
+      description: Edit Partially a single user details
+      summary: Edit partially a single user details
       tags:
       - auth
       requestBody:
@@ -374,17 +383,25 @@ paths:
                 $ref: '#/components/schemas/UserCreate'
           description: ''
     delete:
-      operationId: auth_users_me_destroy
+      operationId: Delete a single user details
+      description: Deleted a single user details
+      summary: Delete a single user details
       tags:
       - auth
       security:
       - jwtAuth: []
       responses:
-        '204':
-          description: No response body
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
   /api/auth/users/resend_activation/:
     post:
-      operationId: auth_users_resend_activation_create
+      operationId: Resend User Activation
+      description: This endpoint is used to resend user activation
+      summary: This endpoint is used to resend user activation
       tags:
       - auth
       requestBody:
@@ -407,7 +424,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SendEmailReset'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/auth/users/reset_email/:
     post:
@@ -465,7 +482,9 @@ paths:
           description: ''
   /api/auth/users/reset_password/:
     post:
-      operationId: auth_users_reset_password_create
+      operationId: Reset Password
+      description: This endpoint is used to reset password
+      summary: This endpoint is used to reset password
       tags:
       - auth
       requestBody:
@@ -488,11 +507,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SendEmailReset'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/auth/users/reset_password_confirm/:
     post:
-      operationId: auth_users_reset_password_confirm_create
+      operationId: Reset Password Confirmation
+      description: This endpoint is used to reset password confirmation
+      summary: This endpoint is used to reset password confirmation
       tags:
       - auth
       requestBody:
@@ -515,11 +536,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PasswordResetConfirmRetype'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/auth/users/set_email/:
     post:
-      operationId: auth_users_set_email_create
+      operationId: Set new username
+      description: This endpoint is used to set username
+      summary: This endpoint is used to set username
       tags:
       - auth
       requestBody:
@@ -541,11 +564,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SetUsernameRetype'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/auth/users/set_password/:
     post:
-      operationId: auth_users_set_password_create
+      operationId: Set Password
+      description: This endpoint is used to set password
+      summary: This endpoint is used to set password
       tags:
       - auth
       requestBody:
@@ -567,12 +592,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SetPasswordRetype'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/blog/:
     get:
-      operationId: list_blog_posts
-      description: This endpoint lists all the blog in the database
+      operationId: List all Blog post
+      description: This endpoint lists all single Blog post
+      summary: This endpoint lists all Blog post
       tags:
       - blog
       security:
@@ -586,8 +612,9 @@ paths:
                 $ref: '#/components/schemas/Blog'
           description: ''
     post:
-      operationId: create_blog_post
-      description: This endpoint creates a blog and saves it in the database
+      operationId: Creates a single Blog post
+      description: This endpoint creates a single Blog and saves it to the database
+      summary: This endpoint creates a single Blog and saves it to the database
       tags:
       - blog
       requestBody:
@@ -613,9 +640,11 @@ paths:
           description: ''
   /api/blog/{slug}/:
     get:
-      operationId: retrieve_single_blog_post
-      description: This endpoint retrieves a single blog post from the database using
-        slug as the unique identifier
+      operationId: Retrieves a single Blog object by its slug
+      description: This endpoint retrieves a single Blog from the database using slug
+        as the unique identifier
+      summary: This endpoint retrieves a single Blog from the database using slug
+        as the unique identifier
       parameters:
       - in: path
         name: slug
@@ -635,9 +664,11 @@ paths:
                 $ref: '#/components/schemas/Blog'
           description: ''
     put:
-      operationId: update_single_blog_post
-      description: This endpoint updates a single blog post from the database using
-        slug as the unique identifier
+      operationId: Updates a single Blog object by its slug
+      description: This endpoint updates a single Blog from the database using slug
+        as the unique identifier
+      summary: This endpoint updates a single Blog from the database using slug as
+        the unique identifier
       parameters:
       - in: path
         name: slug
@@ -668,9 +699,11 @@ paths:
                 $ref: '#/components/schemas/Blog'
           description: ''
     delete:
-      operationId: delete_single_blog_post
-      description: This endpoint deletes a single blog post from the database using
-        slug as the unique identifier
+      operationId: Delete a single Blog object by its slug
+      description: This endpoint deletes a single Blog from the database using slug
+        as the unique identifier
+      summary: This endpoint deletes a single Blog from the database using slug as
+        the unique identifier
       parameters:
       - in: path
         name: slug
@@ -682,8 +715,12 @@ paths:
       security:
       - jwtAuth: []
       responses:
-        '204':
-          description: No response body
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
   /api/presentation/generate-slides/:
     get:
       operationId: List Slides
@@ -913,9 +950,11 @@ paths:
           description: ''
   /api/testimonial/{id}/:
     get:
-      operationId: retrieve_single_testimonial
+      operationId: Retrieve a single Testimonial object by its ID
       description: This endpoint retrieves a single Testimonial from the database
         using id as the unique identifier
+      summary: This endpoint retrieves a single Testimonial from the database using
+        id as the unique identifier
       parameters:
       - in: path
         name: id
@@ -935,9 +974,11 @@ paths:
                 $ref: '#/components/schemas/Testimonial'
           description: ''
     put:
-      operationId: update_single_testimonial
-      description: This endpoint updates a testimonial from the database using id
-        as the unique identifier
+      operationId: Update a single Testimonial object by its ID
+      description: This endpoint updates a single Testimonial from the database using
+        id as the unique identifier
+      summary: This endpoint updates a single Testimonial from the database using
+        id as the unique identifier
       parameters:
       - in: path
         name: id
@@ -968,8 +1009,10 @@ paths:
                 $ref: '#/components/schemas/Testimonial'
           description: ''
     delete:
-      operationId: delete_single_testimonial
-      description: This endpoint deletes a single testimonial from the database using
+      operationId: Delete a single Testimonial object by its ID
+      description: This endpoint deletes a single Testimonial from the database using
+        id as the unique identifier
+      summary: This endpoint deletes a single Testimonial from the database using
         id as the unique identifier
       parameters:
       - in: path
@@ -982,8 +1025,12 @@ paths:
       security:
       - jwtAuth: []
       responses:
-        '204':
-          description: No response body
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Testimonial'
+          description: ''
 components:
   schemas:
     Activation:
