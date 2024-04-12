@@ -196,6 +196,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:5174",
     "https://zlide-backend-api.up.railway.app",
+    "https://zlide-backend-production.up.railway.app",
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -226,7 +227,7 @@ SITE_NAME = 'Zlide'
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'ACTIVATION_URL': 'activation/{uid}/{token}',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'USERNAME_RESET_CONFIRM_URL': 'username-reset/{uid}/{token}',
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
