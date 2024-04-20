@@ -549,13 +549,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SetUsernameRetype'
+              $ref: '#/components/schemas/SetUsername'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/SetUsernameRetype'
+              $ref: '#/components/schemas/SetUsername'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/SetUsernameRetype'
+              $ref: '#/components/schemas/SetUsername'
         required: true
       security:
       - jwtAuth: []
@@ -721,6 +721,95 @@ paths:
               schema:
                 $ref: '#/components/schemas/Blog'
           description: ''
+  /api/jwt/create/:
+    post:
+      operationId: jwt_create_create
+      description: |-
+        This endpoint Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - jwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/jwt/refresh/:
+    post:
+      operationId: jwt_refresh_create
+      description: |-
+        This Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - jwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/jwt/verify/:
+    post:
+      operationId: jwt_verify_create
+      description: This endpoint takes a token and indicates if it is valid.
+      tags:
+      - jwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenVerify'
+          description: ''
+  /api/logout/:
+    post:
+      operationId: logout_create
+      tags:
+      - logout
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
   /api/presentation/generate-slides/:
     get:
       operationId: List Slides
@@ -1179,7 +1268,7 @@ components:
       - current_password
       - new_password
       - re_new_password
-    SetUsernameRetype:
+    SetUsername:
       type: object
       properties:
         current_password:
@@ -1189,12 +1278,9 @@ components:
           format: email
           title: Email address
           maxLength: 255
-        re_new_email:
-          type: string
       required:
       - current_password
       - new_email
-      - re_new_email
     Testimonial:
       type: object
       properties:

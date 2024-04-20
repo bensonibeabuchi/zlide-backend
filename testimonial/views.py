@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.generics import ListAPIView, DestroyAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveDestroyAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, UpdateAPIView
 from .models import Testimonial
 from .serializers import TestimonialSerializer
-from rest_framework.permissions import BasePermission, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import BasePermission, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
@@ -29,7 +29,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
 
 class TestimonialListCreate(APIView):
     serializer_class = TestimonialSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
 
 
     @extend_schema(
@@ -82,7 +82,7 @@ class TestimonialListCreate(APIView):
 
 class TestimonialDetailView(APIView):
     serializer_class = TestimonialSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    permission_classes = [AllowAny]
 
     @extend_schema(
         operation_id='Retrieve a single Testimonial object by its ID',

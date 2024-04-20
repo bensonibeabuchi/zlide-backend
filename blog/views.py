@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
-from rest_framework.permissions import BasePermission, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import BasePermission, IsAuthenticatedOrReadOnly, AllowAny
 from drf_spectacular.utils import extend_schema
 from rest_framework import permissions
 
@@ -28,7 +28,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
 
 class BlogView(APIView):
     serializer_class = BlogSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
 
     @extend_schema(
         operation_id='List all Blog post',
@@ -63,7 +63,7 @@ class BlogView(APIView):
 
 class BlogDetailView(APIView):
     serializer_class = BlogSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    permission_classes = [AllowAny]
 
     @extend_schema(
         operation_id='Retrieves a single Blog object by its slug',

@@ -107,31 +107,30 @@ WSGI_APPLICATION = 'ZLIDE.wsgi.application'
 
 # Local Database, use when you want to work locally
 
-# DATABASES = {
-
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': config('POSTGRESS_USERNAME'),
-#         'USER': 'postgres',
-#         'PASSWORD': config('POSTGRESS_PASSWORD'),
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('POSTGRESS_USERNAME'),
+        'USER': 'postgres',
+        'PASSWORD': config('POSTGRESS_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
+}
 
 
 # Railway Database, use when you want to push to the web
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': config('PASSWORD'),
-        'HOST': config('RAILWAY_HOST'),
-        'PORT': config('PORT'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': config('PASSWORD'),
+#         'HOST': config('RAILWAY_HOST'),
+#         'PORT': config('PORT'),
+#     }
+# }
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -194,9 +193,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "http://localhost:5174",
+    "http://localhost:5173",
     "https://zlide-backend-api.up.railway.app",
     "https://zlide-backend-production.up.railway.app",
+    "https://zlidet.vercel.app",
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -206,7 +206,10 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:5173",
+    "https://zlide-backend-production.up.railway.app",
+    "https://zlidet.vercel.app/",
 ]
+
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -221,7 +224,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
-DOMAIN = 'localhost:5173'
+DOMAIN = 'zlidet.vercel.app'
 SITE_NAME = 'Zlide'
 
 
@@ -229,19 +232,14 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'ACTIVATION_URL': 'activation/{uid}/{token}',
     'USER_CREATE_PASSWORD_RETYPE': True,
-    'USERNAME_RESET_CONFIRM_URL': 'username-reset/{uid}/{token}',
-    'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
     'SEND_CONFIRMATION_EMAIL': True,
     'SEND_ACTIVATION_EMAIL': True,
-    'SET_USERNAME_RETYPE': True,
     'SET_PASSWORD_RETYPE': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
     'PASSWORD_RESET_CONFIRM_RETYPE': True,
-    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'TOKEN_MODEL': None, # To delete User must set it to None
-    # 'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS' : config('REDIRECT_URLS').split(','),
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS' :  ['http://localhost:3000/api/auth/google', 'http://localhost:3000/api/auth/facebook'],
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS' : 'https://zlidet.vercel.app/auth/google',
     'SERIALIZERS': {
         'user_create': 'users.serializers.UserCreateSerializer',
         'user': 'users.serializers.UserCreateSerializer',
@@ -261,7 +259,7 @@ DJOSER = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-         'rest_framework_simplejwt.authentication.JWTAuthentication',
+         'users.authentication.CustomJWTAuthentication',
      ),
  
     'DEFAULT_PERMISSION_CLASSES': [
@@ -301,9 +299,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-
-
-
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_AUTH_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_AUTH_SECRET_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
@@ -319,3 +314,13 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'email, first_name, last_name'
 }
+
+AUTH_COOKIE = 'access'
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5
+AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 5
+AUTH_COOKIE_MAX_AGE = 60 * 60 * 24
+AUTH_COOKIE_SECURE = 'True'
+AUTH_COOKIE_HTTP_ONLY = True
+AUTH_COOKIE_PATH = '/'
+AUTH_COOKIE_SAMESITE = 'None'
+
