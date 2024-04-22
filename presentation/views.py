@@ -14,25 +14,38 @@ from rest_framework import status
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from openai import OpenAI
 
 
 
 load_dotenv()
 api_key = os.getenv("OPENAI_KEY")
 
+client = OpenAI()
+
 
 def get_chatbot_response(user_input):
     openai.api_key = api_key
     # user_input = request.POST.get('user_input')
     prompt = f"generate a 7 slide content for a powerpoint presentation with slides, titles and content and convert them into a Json array with each item having a slide, title, content about: {user_input}"
-    response = openai.chat.completions.create(
-        model="gpt-3.5-turbo-0125",
+    # response = openai.chat.completions.create(
+    #     model="gpt-3.5-turbo-0125",
+    #     messages=[
+    #         {"role": "user", "content": prompt}
+    #     ],
+    #     max_tokens=256,
+    #     temperature=0.5
+    # )
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "user", "content": prompt}
-        ],
-        max_tokens=256,
-        temperature=0.5
-    )
+        ]
+        )
+    print(f'{response.usage.prompt_tokens} prompt tokens used.')
+
+    
     chatbot_response = response.choices[0].message.content
     
     if response.choices:
