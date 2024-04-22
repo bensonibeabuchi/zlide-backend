@@ -24,7 +24,7 @@ api_key = os.getenv("OPENAI_KEY")
 def get_chatbot_response(user_input):
     openai.api_key = api_key
     # user_input = request.POST.get('user_input')
-    prompt = f"write a 3 slide content for a powerpoint presentation with slides, titles and content and convert them into a Json array with each item having a slide, title, content about: {user_input}"
+    prompt = f"generate a 7 slide content for a powerpoint presentation with slides, titles and content and convert them into a Json array with each item having a slide, title, content about: {user_input}"
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo-0125",
         messages=[
