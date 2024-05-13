@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'blog.apps.BlogConfig',
     'testimonial.apps.TestimonialConfig',
+    'django',
 ]
 
 AUTH_USER_MODEL = "users.CustomUser"
@@ -92,45 +93,34 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ZLIDE.wsgi.application'
 
 
-# #Digital Ocean Database
-# DATABASES = {
 
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'newdb',
-#         'USER': 'newuser',
-#         'PASSWORD': 'newpassword',
-#         'HOST': 'localhost',
-#         'PORT': ''
-#     }
-# }
 
 # Local Database, use when you want to work locally
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': config('POSTGRESS_USERNAME'),
-#         'USER': 'postgres',
-#         'PASSWORD': config('POSTGRESS_PASSWORD'),
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
-
-
-# Railway Database, use when you want to push to the web
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway',
+        'NAME': config('POSTGRESS_USERNAME'),
         'USER': 'postgres',
-        'PASSWORD': config('PASSWORD'),
-        'HOST': config('RAILWAY_HOST'),
-        'PORT': config('PORT'),
+        'PASSWORD': config('POSTGRESS_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
+
+
+# Railway Database, use when you want to push to the web
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': config('PASSWORD'),
+#         'HOST': config('RAILWAY_HOST'),
+#         'PORT': config('PORT'),
+#     }
+# }
 
 
 AUTH_PASSWORD_VALIDATORS = [
