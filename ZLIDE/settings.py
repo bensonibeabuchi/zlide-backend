@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '206.81.1.125', ".vercel.app", ".now.sh"]
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '206.81.1.125']
 
 
 # Application definition
@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     'blog.apps.BlogConfig',
     'testimonial.apps.TestimonialConfig',
-    'django',
 ]
 
 AUTH_USER_MODEL = "users.CustomUser"
@@ -94,34 +93,45 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ZLIDE.wsgi.application'
 
 
+# #Digital Ocean Database
+# DATABASES = {
 
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'newdb',
+#         'USER': 'newuser',
+#         'PASSWORD': 'newpassword',
+#         'HOST': 'localhost',
+#         'PORT': ''
+#     }
+# }
 
 # Local Database, use when you want to work locally
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('POSTGRESS_USERNAME'),
-        'USER': 'postgres',
-        'PASSWORD': config('POSTGRESS_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
-}
-
-
-# Railway Database, use when you want to push to the web
 
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'railway',
+#         'NAME': config('POSTGRESS_USERNAME'),
 #         'USER': 'postgres',
-#         'PASSWORD': config('PASSWORD'),
-#         'HOST': config('RAILWAY_HOST'),
-#         'PORT': config('PORT'),
+#         'PASSWORD': config('POSTGRESS_PASSWORD'),
+#         'HOST': 'localhost',
+#         'PORT': '5432'
 #     }
 # }
+
+
+# Railway Database, use when you want to push to the web
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': config('PASSWORD'),
+        'HOST': config('RAILWAY_HOST'),
+        'PORT': config('PORT'),
+    }
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -169,8 +179,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles',)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
