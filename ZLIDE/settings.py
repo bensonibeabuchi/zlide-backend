@@ -129,7 +129,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': config('PASSWORD'),
         'HOST': config('RAILWAY_HOST'),
-        'PORT': config('PORT'),
+        'PORT': '41883',
     }
 }
 
