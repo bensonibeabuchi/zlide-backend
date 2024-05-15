@@ -93,19 +93,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ZLIDE.wsgi.application'
 
 
-# #Digital Ocean Database
-# DATABASES = {
-
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'newdb',
-#         'USER': 'newuser',
-#         'PASSWORD': 'newpassword',
-#         'HOST': 'localhost',
-#         'PORT': ''
-#     }
-# }
-
 # Local Database, use when you want to work locally
 
 # DATABASES = {
@@ -129,7 +116,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': config('PASSWORD'),
         'HOST': config('RAILWAY_HOST'),
-        'PORT': '41883',
+        'PORT': config('PORT'),
     }
 }
 
@@ -231,10 +218,11 @@ SITE_NAME = 'Zlide'
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'ACTIVATION_URL': 'activation/{uid}/{token}',
+    # 'ACTIVATION_URL': 'activation/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'SEND_CONFIRMATION_EMAIL': True,
-    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_ACTIVATION_EMAIL': False,
     'SET_PASSWORD_RETYPE': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',

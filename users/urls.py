@@ -9,6 +9,9 @@ urlpatterns = [
         name='provider-auth'
     ),
     path('', index, name='index'),
+    path('users/', CustomUserCreateView.as_view(), name='user-create'),
+    path('activate/', CustomActivationView.as_view(), name='activate'),
+    path('resend-otp/', SendOTPView.as_view(), name='send-otp'),
     path('', include('djoser.urls')),
     path('', include('djoser.social.urls')),
     path('jwt/create/', CustomTokenObtainPairView.as_view()),
