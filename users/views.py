@@ -244,7 +244,7 @@ class CustomActivationView(APIView):
             protocol = 'https' if self.request.is_secure() else 'http'
             html_message = render_to_string('users/confirmation.html', {
                 'user': user,
-                'domain': current_site.domain,
+                'domain': settings.DOMAIN,
                 'protocol': protocol,
                 'site_name': settings.SITE_NAME,
             })
