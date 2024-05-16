@@ -5,594 +5,36 @@ info:
   description: A web-based software solution designed to streamline the process of
     creating PowerPoint presentations using AI
 paths:
-  /api/auth/jwt/create/:
+  /api/activate/:
     post:
-      operationId: auth_jwt_create_create
-      description: |-
-        This endpoint Takes a set of user credentials and returns an access and refresh JSON web
-        token pair to prove the authentication of those credentials.
+      operationId: Activate user using OTP
+      description: This endpoint activates a user using OTP
+      summary: This endpoint is used to activate a user using the OTP sent to their
+        email.
       tags:
-      - auth
+      - activate
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              type: object
+              additionalProperties: {}
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              type: object
+              additionalProperties: {}
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenObtainPair'
-          description: ''
-  /api/auth/jwt/refresh/:
-    post:
-      operationId: auth_jwt_refresh_create
-      description: |-
-        This Takes a refresh type JSON web token and returns an access type JSON web
-        token if the refresh token is valid.
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenRefresh'
-          description: ''
-  /api/auth/jwt/verify/:
-    post:
-      operationId: auth_jwt_verify_create
-      description: This endpoint takes a token and indicates if it is valid.
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TokenVerify'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/TokenVerify'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/TokenVerify'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenVerify'
-          description: ''
-  /api/auth/o/{provider}/:
-    get:
-      operationId: This endpoint is used to GET Google OAuth2/Facebook Authorization
-        url
-      description: This endpoint is used to GET Google OAuth2/Facebook Authorization
-        url
-      summary: This endpoint is used to GET Google OAuth2/Facebook Authorization url
-      parameters:
-      - in: path
-        name: provider
-        schema:
-          type: string
-          pattern: ^\S+$
-        required: true
-      tags:
-      - auth
+              type: object
+              additionalProperties: {}
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProviderAuth'
-          description: ''
-    post:
-      operationId: auth_o_create
-      parameters:
-      - in: path
-        name: provider
-        schema:
-          type: string
-          pattern: ^\S+$
-        required: true
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProviderAuth'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/ProviderAuth'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/ProviderAuth'
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProviderAuth'
-          description: ''
-  /api/auth/users/:
-    get:
-      operationId: auth_users_list
-      tags:
-      - auth
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserCreate'
-          description: ''
-    post:
-      operationId: auth_users_create
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreatePasswordRetype'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/UserCreatePasswordRetype'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserCreatePasswordRetype'
-        required: true
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreatePasswordRetype'
-          description: ''
-  /api/auth/users/{id}/:
-    get:
-      operationId: auth_users_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this custom user.
-        required: true
-      tags:
-      - auth
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-    put:
-      operationId: auth_users_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this custom user.
-        required: true
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-    patch:
-      operationId: auth_users_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this custom user.
-        required: true
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedUserCreate'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedUserCreate'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedUserCreate'
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-    delete:
-      operationId: auth_users_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this custom user.
-        required: true
-      tags:
-      - auth
-      security:
-      - jwtAuth: []
-      responses:
-        '204':
-          description: No response body
-  /api/auth/users/activation/:
-    post:
-      operationId: User Activation
-      description: This endpoint is used for user activation
-      summary: This endpoint is used for user activation
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Activation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Activation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Activation'
-        required: true
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-  /api/auth/users/me/:
-    get:
-      operationId: Get a single user details
-      description: Get a single user details
-      summary: Get a single user details
-      tags:
-      - auth
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-    put:
-      operationId: Edit a single user details
-      description: Edit a single user details
-      summary: Edit a single user details
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-    patch:
-      operationId: Edit partially a single user details
-      description: Edit Partially a single user details
-      summary: Edit partially a single user details
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedUserCreate'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedUserCreate'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedUserCreate'
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-    delete:
-      operationId: Delete a single user details
-      description: Deleted a single user details
-      summary: Delete a single user details
-      tags:
-      - auth
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-  /api/auth/users/resend_activation/:
-    post:
-      operationId: Resend User Activation
-      description: This endpoint is used to resend user activation
-      summary: This endpoint is used to resend user activation
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SendEmailReset'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/SendEmailReset'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/SendEmailReset'
-        required: true
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-  /api/auth/users/reset_email/:
-    post:
-      operationId: auth_users_reset_email_create
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SendEmailReset'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/SendEmailReset'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/SendEmailReset'
-        required: true
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SendEmailReset'
-          description: ''
-  /api/auth/users/reset_email_confirm/:
-    post:
-      operationId: auth_users_reset_email_confirm_create
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsernameResetConfirm'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/UsernameResetConfirm'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UsernameResetConfirm'
-        required: true
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsernameResetConfirm'
-          description: ''
-  /api/auth/users/reset_password/:
-    post:
-      operationId: Reset Password
-      description: This endpoint is used to reset password
-      summary: This endpoint is used to reset password
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SendEmailReset'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/SendEmailReset'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/SendEmailReset'
-        required: true
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-  /api/auth/users/reset_password_confirm/:
-    post:
-      operationId: Reset Password Confirmation
-      description: This endpoint is used to reset password confirmation
-      summary: This endpoint is used to reset password confirmation
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PasswordResetConfirmRetype'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PasswordResetConfirmRetype'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PasswordResetConfirmRetype'
-        required: true
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-  /api/auth/users/set_email/:
-    post:
-      operationId: Set new username
-      description: This endpoint is used to set username
-      summary: This endpoint is used to set username
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SetUsername'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/SetUsername'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/SetUsername'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
-          description: ''
-  /api/auth/users/set_password/:
-    post:
-      operationId: Set Password
-      description: This endpoint is used to set password
-      summary: This endpoint is used to set password
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SetPasswordRetype'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/SetPasswordRetype'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/SetPasswordRetype'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
+                $ref: '#/components/schemas/CustomUser'
           description: ''
   /api/blog/:
     get:
@@ -602,7 +44,6 @@ paths:
       tags:
       - blog
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -630,7 +71,7 @@ paths:
               $ref: '#/components/schemas/Blog'
         required: true
       security:
-      - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -654,7 +95,6 @@ paths:
       tags:
       - blog
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -690,7 +130,7 @@ paths:
               $ref: '#/components/schemas/Blog'
         required: true
       security:
-      - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -713,7 +153,7 @@ paths:
       tags:
       - blog
       security:
-      - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -723,93 +163,181 @@ paths:
           description: ''
   /api/jwt/create/:
     post:
-      operationId: jwt_create_create
-      description: |-
-        This endpoint Takes a set of user credentials and returns an access and refresh JSON web
-        token pair to prove the authentication of those credentials.
+      operationId: Login with JWT Token
+      description: This endpoint is used to Login with with JWT Token
+      summary: This endpoint is used to Login with JWT Token. The Token is stored
+        using http cookies automatically
       tags:
       - jwt
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              type: object
+              additionalProperties: {}
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              type: object
+              additionalProperties: {}
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
-        required: true
+              type: object
+              additionalProperties: {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenObtainPair'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/jwt/refresh/:
     post:
-      operationId: jwt_refresh_create
-      description: |-
-        This Takes a refresh type JSON web token and returns an access type JSON web
-        token if the refresh token is valid.
+      operationId: Refresh JWT Token
+      description: This endpoint refreshes the JWT Token
+      summary: This endpoint is used to refresh the JWT Token. The Token is then stored
+        using http cookies automatically
       tags:
       - jwt
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              type: object
+              additionalProperties: {}
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              type: object
+              additionalProperties: {}
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
-        required: true
+              type: object
+              additionalProperties: {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenRefresh'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/jwt/verify/:
     post:
-      operationId: jwt_verify_create
-      description: This endpoint takes a token and indicates if it is valid.
+      operationId: Verify JWT Token
+      description: This endpoint verifies the JWT Token
+      summary: This endpoint is used to verify the JWT Token. The Token is then stored
+        using http cookies automatically
       tags:
       - jwt
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenVerify'
+              type: object
+              additionalProperties: {}
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenVerify'
+              type: object
+              additionalProperties: {}
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenVerify'
-        required: true
+              type: object
+              additionalProperties: {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenVerify'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/logout/:
     post:
-      operationId: logout_create
+      operationId: Logout Endpoint
+      description: This endpoint logs out the user by deleting the cookie from the
+        browser.
+      summary: This endpoint logs out the user by deleting the cookie from the browser.
       tags:
       - logout
-      security:
-      - jwtAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              additionalProperties: {}
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/o/{provider}/:
+    get:
+      operationId: This endpoint is used to GET Google OAuth2/Facebook Authorization
+        url
+      description: This endpoint is used to GET Google OAuth2/Facebook Authorization
+        url
+      summary: This endpoint is used to GET Google OAuth2/Facebook Authorization url
+      parameters:
+      - in: path
+        name: provider
+        schema:
+          type: string
+          pattern: ^\S+$
+        required: true
+      tags:
+      - o
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAuth'
+          description: ''
+    post:
+      operationId: Google/Facebook Authentication
+      description: This endpoint is used to Login with Google/Facebook
+      summary: This endpoint is used to Login with Google/Facebook
+      parameters:
+      - in: path
+        name: provider
+        schema:
+          type: string
+          pattern: ^\S+$
+        required: true
+      tags:
+      - o
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              additionalProperties: {}
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
   /api/presentation/generate-slides/:
     get:
       operationId: List Slides
@@ -818,7 +346,6 @@ paths:
       tags:
       - presentation
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -857,7 +384,6 @@ paths:
               type: object
               additionalProperties: {}
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -880,7 +406,6 @@ paths:
       tags:
       - presentation
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -914,7 +439,6 @@ paths:
               $ref: '#/components/schemas/Zlide'
         required: true
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -947,7 +471,6 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedZlide'
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -969,7 +492,6 @@ paths:
       tags:
       - presentation
       security:
-      - jwtAuth: []
       - {}
       responses:
         '204':
@@ -977,6 +499,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Zlide'
+          description: ''
+  /api/resend-otp/:
+    post:
+      operationId: Resend OTP to user
+      description: This endpoint resends OTP to user
+      summary: This endpoint is used to resend OTP to user provided they have their
+        email address.
+      tags:
+      - resend-otp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              additionalProperties: {}
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
           description: ''
   /api/testimonial/:
     get:
@@ -986,7 +539,6 @@ paths:
       tags:
       - testimonial
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -1029,7 +581,7 @@ paths:
               type: object
               additionalProperties: {}
       security:
-      - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -1053,7 +605,6 @@ paths:
       tags:
       - testimonial
       security:
-      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -1089,7 +640,7 @@ paths:
               $ref: '#/components/schemas/Testimonial'
         required: true
       security:
-      - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -1112,13 +663,436 @@ paths:
       tags:
       - testimonial
       security:
-      - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Testimonial'
+          description: ''
+  /api/users/:
+    get:
+      operationId: users_list
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserCreate'
+          description: ''
+    post:
+      operationId: users_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+  /api/users/{id}/:
+    get:
+      operationId: users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    put:
+      operationId: users_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    delete:
+      operationId: users_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - users
+      responses:
+        '204':
+          description: No response body
+  /api/users/activation/:
+    post:
+      operationId: User Activation
+      description: This endpoint is used for user activation
+      summary: This endpoint is used for user activation
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Activation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Activation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Activation'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/users/me/:
+    get:
+      operationId: Get a single user details
+      description: Get a single user details
+      summary: Get a single user details
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    put:
+      operationId: Edit a single user details
+      description: Edit a single user details
+      summary: Edit a single user details
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    patch:
+      operationId: Edit partially a single user details
+      description: Edit Partially a single user details
+      summary: Edit partially a single user details
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCreate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+    delete:
+      operationId: Delete a single user details
+      description: Deleted a single user details
+      summary: Delete a single user details
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/users/resend_activation/:
+    post:
+      operationId: Resend User Activation
+      description: This endpoint is used to resend user activation
+      summary: This endpoint is used to resend user activation
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/users/reset_email/:
+    post:
+      operationId: users_reset_email_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /api/users/reset_email_confirm/:
+    post:
+      operationId: users_reset_email_confirm_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameResetConfirm'
+          description: ''
+  /api/users/reset_password/:
+    post:
+      operationId: Reset Password
+      description: This endpoint is used to reset password
+      summary: This endpoint is used to reset password
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/users/reset_password_confirm/:
+    post:
+      operationId: Reset Password Confirmation
+      description: This endpoint is used to reset password confirmation
+      summary: This endpoint is used to reset password confirmation
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRetype'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRetype'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRetype'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/users/set_email/:
+    post:
+      operationId: Set new username
+      description: This endpoint is used to set username
+      summary: This endpoint is used to set username
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetUsername'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetUsername'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetUsername'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/users/set_password/:
+    post:
+      operationId: Set Password
+      description: This endpoint is used to set password
+      summary: This endpoint is used to set password
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPasswordRetype'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetPasswordRetype'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetPasswordRetype'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
           description: ''
 components:
   schemas:
@@ -1157,12 +1131,46 @@ components:
         author:
           type: integer
       required:
-      - author
       - content
       - date_posted
       - id
       - slug
       - title
+    CustomUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+        password:
+          type: string
+          writeOnly: true
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        job_title:
+          type: string
+          nullable: true
+          maxLength: 255
+        company:
+          type: string
+          nullable: true
+          title: Company name
+          maxLength: 255
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
     PasswordResetConfirmRetype:
       type: object
       properties:
@@ -1201,9 +1209,11 @@ components:
           maxLength: 255
         job_title:
           type: string
+          nullable: true
           maxLength: 255
         company:
           type: string
+          nullable: true
           title: Company name
           maxLength: 255
     PatchedZlide:
@@ -1311,45 +1321,6 @@ components:
       - rating
       - review
       - updated_date
-    TokenObtainPair:
-      type: object
-      properties:
-        email:
-          type: string
-          writeOnly: true
-        password:
-          type: string
-          writeOnly: true
-        access:
-          type: string
-          readOnly: true
-        refresh:
-          type: string
-          readOnly: true
-      required:
-      - access
-      - email
-      - password
-      - refresh
-    TokenRefresh:
-      type: object
-      properties:
-        access:
-          type: string
-          readOnly: true
-        refresh:
-          type: string
-      required:
-      - access
-      - refresh
-    TokenVerify:
-      type: object
-      properties:
-        token:
-          type: string
-          writeOnly: true
-      required:
-      - token
     UserCreate:
       type: object
       properties:
@@ -1372,57 +1343,19 @@ components:
           maxLength: 255
         job_title:
           type: string
+          nullable: true
           maxLength: 255
         company:
           type: string
+          nullable: true
           title: Company name
           maxLength: 255
       required:
-      - company
       - email
       - first_name
       - id
-      - job_title
       - last_name
       - password
-    UserCreatePasswordRetype:
-      type: object
-      properties:
-        first_name:
-          type: string
-          maxLength: 255
-        last_name:
-          type: string
-          maxLength: 255
-        job_title:
-          type: string
-          maxLength: 255
-        company:
-          type: string
-          title: Company name
-          maxLength: 255
-        email:
-          type: string
-          format: email
-          title: Email address
-          maxLength: 255
-        id:
-          type: integer
-          readOnly: true
-        password:
-          type: string
-          writeOnly: true
-        re_password:
-          type: string
-      required:
-      - company
-      - email
-      - first_name
-      - id
-      - job_title
-      - last_name
-      - password
-      - re_password
     UsernameResetConfirm:
       type: object
       properties:
@@ -1448,9 +1381,3 @@ components:
       - created_at
       - id
       - presentation_data
-  securitySchemes:
-    jwtAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      description: Token-based authentication with required prefix "JWT"

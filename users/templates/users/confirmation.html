@@ -37,9 +37,17 @@
         <p>Your account has been activated succesfully</p>
         <div>
           <p>Please click this link to login</p>
-          <p style="margin-bottom:100px"><a
+          <p 
+          style="margin-bottom:100px">
+          <a 
+          style="display: inline-block; padding: 16px 32px; border-radius: 4px; background-color: #0056b3 ; color: white; font-weight: semi-bold; text-decoration: none;" 
+          href="{{ protocol }}://{{ domain }}/login">
+            Login to Account
+          </a>
+          </p>
+          {% comment %} <p style="margin-bottom:100px"><a
             style="display: inline-block; padding: 16px 32px; border-radius: 4px; background-color: #0056b3 ; color: white; font-weight: semi-bold; text-decoration: none;"
-            href="{{ protocol }}://{{ domain }}/login">Login to Account</a></p>
+            href="https://zlidet.vercel.app/login">Login to Account</a></p> {% endcomment %}
         </div>
 
         <p>Follow us: </p>

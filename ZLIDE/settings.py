@@ -95,30 +95,30 @@ WSGI_APPLICATION = 'ZLIDE.wsgi.application'
 
 # Local Database, use when you want to work locally
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': config('POSTGRESS_USERNAME'),
-#         'USER': 'postgres',
-#         'PASSWORD': config('POSTGRESS_PASSWORD'),
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('POSTGRESS_USERNAME'),
+        'USER': 'postgres',
+        'PASSWORD': config('POSTGRESS_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
+}
 
 
 # Railway Database, use when you want to push to the web
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': config('PASSWORD'),
-        'HOST': config('RAILWAY_HOST'),
-        'PORT': config('PORT'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': config('PASSWORD'),
+#         'HOST': config('RAILWAY_HOST'),
+#         'PORT': config('PORT'),
+#     }
+# }
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -218,12 +218,9 @@ SITE_NAME = 'Zlide'
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    # 'ACTIVATION_URL': 'activation/{uid}/{token}',
     'ACTIVATION_URL': 'activate/',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'SEND_CONFIRMATION_EMAIL': True,
-    'SEND_ACTIVATION_EMAIL': False,
-    'SET_PASSWORD_RETYPE': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
     'PASSWORD_RESET_CONFIRM_RETYPE': True,
