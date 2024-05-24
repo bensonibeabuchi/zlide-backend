@@ -212,7 +212,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
-DOMAIN = 'zlidet.vercel.app'
+DOMAIN = 'localhost:5173'
 SITE_NAME = 'Zlide'
 
 

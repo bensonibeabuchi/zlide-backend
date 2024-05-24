@@ -12,6 +12,7 @@ class Image(models.Model):
 
     
 class Zlide(models.Model):
+    presentation_name = models.CharField(max_length=256, default='Untitled Presentation', blank=True, null=True)
     presentation_data = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -5,23 +5,24 @@ from rest_framework.response import Response
 from rest_framework import status
 from djoser.social.views import ProviderAuthView
 from .serializers import UserCreateSerializer
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import extend_schema
 from drf_spectacular.types import OpenApiTypes
 from rest_framework.permissions import AllowAny
 from users.models import CustomUser
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
-from djoser.views import UserViewSet
-from rest_framework.decorators import action
 from django.conf import settings
 from .serializers import *
 from rest_framework import generics
 import random
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import strip_tags
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import update_last_login
+from rest_framework.authtoken.models import Token
 
 
 
@@ -158,20 +159,32 @@ class CustomTokenVerifyView(TokenVerifyView):
 
 
 class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+    
     @extend_schema(
         operation_id='Logout Endpoint',
-        description='This endpoint logs out the user by deleting the cookie from the browser.',
-        summary='This endpoint logs out the user by deleting the cookie from the browser.',
-        request= OpenApiTypes.OBJECT,
-        responses={200: UserCreateSerializer},
+        description='This endpoint logs out the user by deleting the cookie from the browser and invalidating the tokens.',
+        summary='This endpoint logs out the user by deleting the cookie from the browser and invalidating the tokens.',
+        request=OpenApiTypes.OBJECT,
+        responses={204: None},
     )
-    
     def post(self, request, *args, **kwargs):
+        try:
+            # Blacklist the refresh token if available
+            refresh_token = request.COOKIES.get('refresh')
+            if refresh_token:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+        except Exception as e:
+            # Optionally handle the error
+            pass
+        
+        # Remove cookies from the browser
         response = Response(status=status.HTTP_204_NO_CONTENT)
         response.delete_cookie('access')
         response.delete_cookie('refresh')
-
         return response
+    
 
 def index(request):
     return render(request, 'users/index.html')
@@ -187,27 +200,39 @@ class CustomUserCreateView(generics.CreateAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [AllowAny]
 
-    def perform_create(self, serializer):
-        user = serializer.save(is_active=False)
-        otp = generate_otp()
-        user.otp = otp  # Save the OTP to the user model or another model
-        user.save()
+    @extend_schema(
+        operation_id='Create a User using OTP verification',
+        description='This endpoint Create a User using OTP verification',
+        summary='This endpoint is used to Create a User using OTP verification',
+        request= OpenApiTypes.OBJECT,
+        responses={200: CustomUserSerializer},
+        )
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save(is_active=False)
+            otp = generate_otp()
+            user.otp = otp
+            user.save()
 
-        email = user.email
-        current_site = get_current_site(self.request)
-        subject = 'Please Activate your account'
-        html_message = render_to_string('users/activation.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'otp': otp,
-            'site_name': settings.SITE_NAME,
-        })
-        from_email = 'bensonibeabuchistudios@gmail.com'
-        plain_message = strip_tags(html_message)
-        to_email = user.email
-        email = EmailMultiAlternatives(subject, plain_message, from_email, [to_email])
-        email.attach_alternative(html_message, "text/html")
-        email.send()
+            email = user.email
+            current_site = get_current_site(request)
+            subject = 'Please Activate your account'
+            html_message = render_to_string('users/activation.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'otp': otp,
+                'site_name': settings.SITE_NAME,
+            })
+            from_email = 'bensonibeabuchistudios@gmail.com'
+            plain_message = strip_tags(html_message)
+            to_email = user.email
+            email = EmailMultiAlternatives(subject, plain_message, from_email, [to_email])
+            email.attach_alternative(html_message, "text/html")
+            email.send()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -263,7 +288,7 @@ class CustomActivationView(APIView):
 
 
 
-class SendOTPView(APIView):
+class ResendOTPView(APIView):
     permission_classes = [AllowAny]
     @extend_schema(
         operation_id='Resend OTP to user',
@@ -290,7 +315,7 @@ class SendOTPView(APIView):
 
         email = user.email
         current_site = get_current_site(self.request)
-        subject = 'Please Activate your account'
+        subject = 'Your new OTP'
         html_message = render_to_string('users/resendotp.html', {
                 'user': user,
                 'domain': current_site.domain,
@@ -304,3 +329,5 @@ class SendOTPView(APIView):
         email = EmailMultiAlternatives(subject, plain_message, from_email, [to_email])
         email.attach_alternative(html_message, "text/html")
         email.send()
+
+        return Response({'message': _('OTP resent successfully.')}, status=status.HTTP_200_OK)

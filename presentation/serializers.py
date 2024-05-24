@@ -4,4 +4,4 @@ from .models import *
 class ZlideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zlide
-        fields = ['id', 'presentation_data', 'created_at']
+        fields = ['id', 'presentation_name', 'created_at', 'presentation_data',  ]
