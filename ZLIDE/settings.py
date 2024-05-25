@@ -213,6 +213,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
 DOMAIN = 'localhost:5173'
+# DOMAIN = 'localhost:3000'
 SITE_NAME = 'Zlide'
 
 

@@ -15,6 +15,7 @@ class Testimonial(models.Model):
 
     review = models.TextField()
     author = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.SET_NULL, related_name='author_testimonials')
+    name = models.CharField(max_length=256, blank=True, null=True, default='Unknown')
     rating = models.IntegerField(choices=RATING_CHOICES)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)

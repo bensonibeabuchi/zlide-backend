@@ -33,8 +33,29 @@ client = OpenAI()
 
 
 
-def get_unsplash_images(query, per_page=7):
-    url = f"https://api.unsplash.com/search/photos"
+# def get_unsplash_images(query, per_page=10):
+#     url = f"https://api.unsplash.com/search/photos"
+#     headers = {
+#         "Authorization": f"Client-ID {UNSPLASH_ACCESS_KEY}"
+#     }
+#     params = {
+#         "query": query,    # The search query term
+#         "per_page": per_page  # Number of results per page
+#     }
+    
+#     response = requests.get(url, headers=headers, params=params)
+    
+#     if response.status_code == 200:
+#         data = response.json()
+#         images = data['results']
+#         image_urls = [image['urls']['regular'] for image in images]
+#         return image_urls
+#     else:
+#         print(f"Error fetching images: {response.status_code}")
+#         return []
+    
+def get_unsplash_images(query, per_page=10):
+    url = "https://api.unsplash.com/search/photos"
     headers = {
         "Authorization": f"Client-ID {UNSPLASH_ACCESS_KEY}"
     }
@@ -48,28 +69,69 @@ def get_unsplash_images(query, per_page=7):
     if response.status_code == 200:
         data = response.json()
         images = data['results']
-        image_urls = [image['urls']['regular'] for image in images]
+        
+        # Hardcoded width and height
+        width = 440
+        height = 520
+        
+        # Generate the image URLs with hardcoded width and height parameters
+        image_urls = []
+        for image in images:
+            image_url = image['urls']['regular']
+            image_url += f'&w={width}&h={height}'
+            image_urls.append(image_url)
+        
         return image_urls
     else:
         print(f"Error fetching images: {response.status_code}")
         return []
+
     
 def get_chatbot_response(user_input):
     openai.api_key = api_key
-    prompt = f"generate a 7 slide content for a powerpoint presentation with slides, titles and content and convert them into a Json array with each item having a slide, title, content about: {user_input}. The title should only contain title text without naming what slide it is"
+    prompt = f"following Guy kawasaki principles, generate a 10 page pitch deck with slides, titles and an explanatory robust content and convert them into a Json array with each item having a slide, title, content about: {user_input}. The title should only contain title text without naming what slide it is"
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-0125",
         messages=[
             {"role": "user", "content": prompt}
-        ]
+        ],
+        max_tokens=1500,  # Increase the maximum number of tokens
+        temperature=0.7   # Set temperature for creativity
         )
     print(f'{response.usage.prompt_tokens} prompt tokens used.')
     chatbot_response = response.choices[0].message.content
     
     if response.choices:
-        return json.loads(response.choices[0].message.content)
+        try:
+            return json.loads(chatbot_response)
+        except json.JSONDecodeError:
+            # Handle JSON decoding error if the response is not a valid JSON
+            return {"error": "Invalid JSON response"}
     else:
-        return None
+        return {"error": "No response from the model"}
+    
+
+# def openai_image_generation(user_input):
+#     openai.api_key = api_key
+#     prompt = {user_input}
+#     response = client.images.generate(
+#     model="dall-e-3",
+#     prompt="a white siamese cat",
+#     size="1024x1024",
+#     quality="standard",
+#     n=1,
+#     )
+#     print(f'{response.usage.prompt_tokens} prompt tokens used.')
+#     image_url = response.data[0].url
+    
+#     if response.choices:
+#         try:
+#             return json.loads(image_url)
+#         except json.JSONDecodeError:
+#             # Handle JSON decoding error if the response is not a valid JSON
+#             return {"error": "Invalid JSON response"}
+#     else:
+#         return {"error": "No response from the model"}
     
 
 class GenerateSlidesAPIView(ListCreateAPIView):
