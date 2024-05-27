@@ -8,7 +8,7 @@ import json
 from .models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import *
 from rest_framework import status
 from drf_spectacular.utils import extend_schema, OpenApiParameter
@@ -135,7 +135,7 @@ def get_chatbot_response(user_input):
     
 
 class GenerateSlidesAPIView(ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = ZlideSerializer
 
     @extend_schema(
@@ -171,7 +171,9 @@ class GenerateSlidesAPIView(ListCreateAPIView):
             slide['image_urls'] = image_urls
             combined_response.append(slide)
 
-        zlide_data = {'presentation_data': combined_response}
+        zlide_data = {'presentation_data': combined_response,
+                      'user': request.user.id  # Add the user ID to the zlide data
+                      }
         zlide_serializer = self.get_serializer(data=zlide_data)
         
         if zlide_serializer.is_valid():
@@ -189,8 +191,10 @@ class GenerateSlidesAPIView(ListCreateAPIView):
         responses={200: ZlideSerializer},
     )
     def get(self, request, *args, **kwargs):
-        serialized_zlide = Zlide.objects.all()
-        serialized_zlide = ZlideSerializer(serialized_zlide, many=True)
+        user = request.user
+        user_zlides = Zlide.objects.filter(user=user) 
+        # serialized_zlide = Zlide.objects.all()
+        serialized_zlide = ZlideSerializer(user_zlides, many=True)
         return Response(serialized_zlide.data, status=status.HTTP_200_OK)
     
 

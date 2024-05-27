@@ -3,9 +3,7 @@ from .models import *
 
 
 class ZlideAdmin(admin.ModelAdmin):
-    list_display = ['custom_display', 'created_at', ]
-
-    def custom_display(self, obj):
-        return f"Zlide {obj.id}"  # Custom method to display a formatted string
+    list_display = ['presentation_name', 'created_at', ]
+    list_filter = ['presentation_name']
 
 admin.site.register(Zlide, ZlideAdmin)
