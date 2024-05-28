@@ -135,7 +135,7 @@ def get_chatbot_response(user_input):
     
 
 class GenerateSlidesAPIView(ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = ZlideSerializer
 
     @extend_schema(
@@ -171,9 +171,12 @@ class GenerateSlidesAPIView(ListCreateAPIView):
             slide['image_urls'] = image_urls
             combined_response.append(slide)
 
-        zlide_data = {'presentation_data': combined_response,
-                      'user': request.user.id  # Add the user ID to the zlide data
-                      }
+        zlide_data = {'presentation_data': combined_response}
+        
+        # If the user is authenticated, add the user ID to zlide_data
+        if request.user.is_authenticated:
+            zlide_data['user'] = request.user.id
+
         zlide_serializer = self.get_serializer(data=zlide_data)
         
         if zlide_serializer.is_valid():
@@ -181,6 +184,7 @@ class GenerateSlidesAPIView(ListCreateAPIView):
             return Response(zlide_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(zlide_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
         
         
     @extend_schema(
@@ -191,9 +195,11 @@ class GenerateSlidesAPIView(ListCreateAPIView):
         responses={200: ZlideSerializer},
     )
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({'error': 'Authentication required to access slides'}, status=status.HTTP_401_UNAUTHORIZED)
+        
         user = request.user
         user_zlides = Zlide.objects.filter(user=user) 
-        # serialized_zlide = Zlide.objects.all()
         serialized_zlide = ZlideSerializer(user_zlides, many=True)
         return Response(serialized_zlide.data, status=status.HTTP_200_OK)
     
