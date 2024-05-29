@@ -224,7 +224,7 @@ class CustomUserCreateView(generics.CreateAPIView):
                 'otp': otp,
                 'site_name': settings.SITE_NAME,
             })
-            from_email = 'bensonibeabuchistudios@gmail.com'
+            from_email = 'zlidementorled@gmail.com'
             plain_message = strip_tags(html_message)
             to_email = user.email
             email = EmailMultiAlternatives(subject, plain_message, from_email, [to_email])
@@ -273,7 +273,7 @@ class CustomActivationView(APIView):
                 'protocol': protocol,
                 'site_name': settings.SITE_NAME,
             })
-            from_email = 'bensonibeabuchistudios@gmail.com'
+            from_email = 'zlidementorled@gmail.com'
             plain_message = strip_tags(html_message)
             to_email = user.email
 
@@ -322,7 +322,7 @@ class ResendOTPView(APIView):
                 'otp': otp,
                 'site_name': settings.SITE_NAME,
             })
-        from_email = 'bensonibeabuchistudios@gmail.com'
+        from_email = 'zlidementorled@gmail.com'
         plain_message = strip_tags(html_message)
         to_email = user.email
 
