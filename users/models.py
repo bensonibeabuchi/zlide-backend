@@ -40,3 +40,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         if not self.company:
             self.company = "No company specified"
         super().save(*args, **kwargs)
+
+
+

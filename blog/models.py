@@ -16,6 +16,7 @@ class Blog(models.Model):
     writer = models.CharField(max_length=256, blank=True, null=True, default='Admin')
     slug = models.SlugField(max_length=1000, unique=True, )
     date_posted = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('-date_posted',)

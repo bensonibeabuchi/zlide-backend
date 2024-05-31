@@ -20,9 +20,6 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.html import strip_tags
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import update_last_login
-from rest_framework.authtoken.models import Token
 
 
 
@@ -331,3 +328,6 @@ class ResendOTPView(APIView):
         email.send()
 
         return Response({'message': _('OTP resent successfully.')}, status=status.HTTP_200_OK)
+    
+
+

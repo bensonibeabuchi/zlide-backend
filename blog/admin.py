@@ -4,7 +4,7 @@ from .models import Blog
 # Register your models here.
 
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ["title", "writer", "date_posted", ]
+    list_display = ["title", "writer", "date_posted", "date_modified" ]
     list_filter = ["date_posted", "writer"]
     prepopulated_fields = {"slug": ("title",)}
     search_fields = ["title"]
