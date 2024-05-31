@@ -1,3 +1,4 @@
+Django==4.2.13
 annotated-types==0.6.0
 anyio==4.3.0
 asgiref==3.7.2
@@ -10,7 +11,6 @@ charset-normalizer==3.3.2
 cryptography==42.0.5
 defusedxml==0.8.0rc2
 distro==1.9.0
-Django==5.0.2
 django-cors-headers==4.3.1
 django-storages==1.14.3
 django-templated-mail==1.1.1
