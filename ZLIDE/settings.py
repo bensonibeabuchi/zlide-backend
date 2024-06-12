@@ -240,7 +240,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://zlide-backend-api.up.railway.app",
     "https://zlide-backend-production.up.railway.app",
     "https://zlidet.vercel.app",
-    "https://zlide-ben.vercel.app/"
+    "https://zlide-ben.vercel.app"
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
