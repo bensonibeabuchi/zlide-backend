@@ -97,30 +97,30 @@ WSGI_APPLICATION = 'ZLIDE.wsgi.application'
 
 # Local Database, use when you want to work locally
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': config('POSTGRESS_USERNAME'),
-#         'USER': 'postgres',
-#         'PASSWORD': config('POSTGRESS_PASSWORD'),
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('POSTGRESS_USERNAME'),
+        'USER': 'postgres',
+        'PASSWORD': config('POSTGRESS_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
+}
 
 
 # Railway Database, use when you want to push to the web
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': config('PASSWORD'),
-        'HOST': config('RAILWAY_HOST'),
-        'PORT': config('PORT'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': config('PASSWORD'),
+#         'HOST': config('RAILWAY_HOST'),
+#         'PORT': config('PORT'),
+#     }
+# }
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -240,6 +240,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://zlide-backend-api.up.railway.app",
     "https://zlide-backend-production.up.railway.app",
     "https://zlidet.vercel.app",
+    "https://zlide-ben.vercel.app/"
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -251,6 +252,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "https://zlide-backend-production.up.railway.app",
     "https://zlidet.vercel.app/",
+    "https://zlide-ben.vercel.app/",
 ]
 
 
@@ -356,10 +358,10 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 }
 
 AUTH_COOKIE = 'access'
-AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 60 * 60 * 24
-AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 60 * 24
-AUTH_COOKIE_MAX_AGE = 60 * 60 * 24
-AUTH_COOKIE_SECURE = 'True'
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 59
+AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24 * 7
+AUTH_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+AUTH_COOKIE_SECURE = True
 AUTH_COOKIE_HTTP_ONLY = True
 AUTH_COOKIE_PATH = '/'
 AUTH_COOKIE_SAMESITE = 'None'

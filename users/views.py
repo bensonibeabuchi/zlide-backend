@@ -105,34 +105,37 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class CustomTokenRefreshView(TokenRefreshView):
-      @extend_schema(
+    @extend_schema(
         operation_id='Refresh JWT Token',
         description='This endpoint refreshes the JWT Token',
-        summary='This endpoint is used to refresh the JWT Token. The Token is then stored using http cookies automatically',
-        request= OpenApiTypes.OBJECT,
+        summary='This endpoint is used to refresh the JWT Token. The Token is then stored using HTTP cookies automatically',
+        request=OpenApiTypes.OBJECT,
         responses={200: UserCreateSerializer},
     )
-      
-      def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        # Get the refresh token from cookies
         refresh_token = request.COOKIES.get('refresh')
 
+        # If the refresh token exists, add it to the request data
         if refresh_token:
             request.data['refresh'] = refresh_token
 
+        # Call the original TokenRefreshView's post method
         response = super().post(request, *args, **kwargs)
 
+        # If the response is successful, set the new access token in cookies
         if response.status_code == 200:
             access_token = response.data.get('access')
-
-            response.set_cookie(
-                'access',
-                access_token,
-                max_age=settings.AUTH_COOKIE_MAX_AGE,
-                path=settings.AUTH_COOKIE_PATH,
-                secure=settings.AUTH_COOKIE_SECURE,
-                httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-                samesite=settings.AUTH_COOKIE_SAMESITE
-            )
+            if access_token:
+                response.set_cookie(
+                    'access',
+                    access_token,
+                    max_age=settings.AUTH_COOKIE_ACCESS_MAX_AGE,
+                    path=settings.AUTH_COOKIE_PATH,
+                    secure=settings.AUTH_COOKIE_SECURE,
+                    httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+                    samesite=settings.AUTH_COOKIE_SAMESITE
+                )
 
         return response
 
@@ -147,24 +150,19 @@ class CustomTokenVerifyView(TokenVerifyView):
     )
 
     def post(self, request, *args, **kwargs):
+        # Get the access token from cookies
         access_token = request.COOKIES.get('access')
 
+        # If the access token exists, add it to the request data
         if access_token:
             request.data['token'] = access_token
 
+        # Call the original TokenVerifyView's post method
         return super().post(request, *args, **kwargs)
-
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
-    
-    @extend_schema(
-        operation_id='Logout Endpoint',
-        description='This endpoint logs out the user by deleting the cookie from the browser and invalidating the tokens.',
-        summary='This endpoint logs out the user by deleting the cookie from the browser and invalidating the tokens.',
-        request=OpenApiTypes.OBJECT,
-        responses={204: None},
-    )
+ 
     def post(self, request, *args, **kwargs):
         try:
             # Blacklist the refresh token if available
