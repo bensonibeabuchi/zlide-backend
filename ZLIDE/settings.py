@@ -310,6 +310,28 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication'
+#     ),
+#       'DEFAULT_PERMISSION_CLASSES': [
+#        'rest_framework.permissions.IsAuthenticated',
+#      ],
+#     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+# }
+
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "UPDATE_LAST_LOGIN": True,
+    "AUTH_TOKEN_CLASSES": (
+        'rest_framework_simplejwt.tokens.AccessToken',
+    )
+}
+
 SPECTACULAR_SETTINGS = {
     "TITLE": "Zlide",
     "DESCRIPTION": "A web-based software solution designed to streamline the process of creating PowerPoint presentations using AI",
@@ -319,18 +341,6 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
     'REDOC_DIST': 'SIDECAR',
     # OTHER SETTINGS
-}
-
-
-SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": True,
-    "UPDATE_LAST_LOGIN": True,
-    "AUTH_TOKEN_CLASSES": (
-        'rest_framework_simplejwt.tokens.AccessToken',
-    )
 }
 
 

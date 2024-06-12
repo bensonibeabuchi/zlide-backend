@@ -29,7 +29,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 
-
+# GOOGLE LOGIN VIEW 
 class CustomProviderAuthView(ProviderAuthView):
     @extend_schema(
         operation_id='Google/Facebook Authentication',
@@ -41,32 +41,33 @@ class CustomProviderAuthView(ProviderAuthView):
     def post(self, request, *args, **kwargs):
             response = super().post(request, *args, **kwargs)
 
-            if response.status_code == 201:
-                access_token = response.data.get('access')
-                refresh_token = response.data.get('refresh')
+            # if response.status_code == 201:
+            #     access_token = response.data.get('access')
+            #     refresh_token = response.data.get('refresh')
 
-                response.set_cookie(
-                    'access',
-                    access_token,
-                    max_age=settings.AUTH_COOKIE_MAX_AGE,
-                    path=settings.AUTH_COOKIE_PATH,
-                    secure=settings.AUTH_COOKIE_SECURE,
-                    httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-                    samesite=settings.AUTH_COOKIE_SAMESITE
-                )
-                response.set_cookie(
-                    'refresh',
-                    refresh_token,
-                    max_age=settings.AUTH_COOKIE_MAX_AGE,
-                    path=settings.AUTH_COOKIE_PATH,
-                    secure=settings.AUTH_COOKIE_SECURE,
-                    httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-                    samesite=settings.AUTH_COOKIE_SAMESITE
-                )
+            #     response.set_cookie(
+            #         'access',
+            #         access_token,
+            #         max_age=settings.AUTH_COOKIE_MAX_AGE,
+            #         path=settings.AUTH_COOKIE_PATH,
+            #         secure=settings.AUTH_COOKIE_SECURE,
+            #         httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+            #         samesite=settings.AUTH_COOKIE_SAMESITE
+            #     )
+            #     response.set_cookie(
+            #         'refresh',
+            #         refresh_token,
+            #         max_age=settings.AUTH_COOKIE_MAX_AGE,
+            #         path=settings.AUTH_COOKIE_PATH,
+            #         secure=settings.AUTH_COOKIE_SECURE,
+            #         httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+            #         samesite=settings.AUTH_COOKIE_SAMESITE
+            #     )
 
             return response
 
 
+# LOGIN VIEW 
 class CustomTokenObtainPairView(TokenObtainPairView):
     @extend_schema(
         operation_id='Login with JWT Token',
@@ -160,25 +161,25 @@ class CustomTokenVerifyView(TokenVerifyView):
         # Call the original TokenVerifyView's post method
         return super().post(request, *args, **kwargs)
 
-class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+# class LogoutView(APIView):
+#     permission_classes = [IsAuthenticated]
  
-    def post(self, request, *args, **kwargs):
-        try:
-            # Blacklist the refresh token if available
-            refresh_token = request.COOKIES.get('refresh')
-            if refresh_token:
-                token = RefreshToken(refresh_token)
-                token.blacklist()
-        except Exception as e:
-            # Optionally handle the error
-            pass
+#     def post(self, request, *args, **kwargs):
+#         try:
+#             # Blacklist the refresh token if available
+#             refresh_token = request.COOKIES.get('refresh')
+#             if refresh_token:
+#                 token = RefreshToken(refresh_token)
+#                 token.blacklist()
+#         except Exception as e:
+#             # Optionally handle the error
+#             pass
         
-        # Remove cookies from the browser
-        response = Response(status=status.HTTP_204_NO_CONTENT)
-        response.delete_cookie('access')
-        response.delete_cookie('refresh')
-        return response
+#         # Remove cookies from the browser
+#         response = Response(status=status.HTTP_204_NO_CONTENT)
+#         response.delete_cookie('access')
+#         response.delete_cookie('refresh')
+#         return response
     
 
 def index(request):
@@ -230,7 +231,6 @@ class CustomUserCreateView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class CustomActivationView(APIView):
     permission_classes = [AllowAny]
     @extend_schema(
@@ -279,7 +279,6 @@ class CustomActivationView(APIView):
             return Response({'message': _('Account activated successfully.')}, status=status.HTTP_200_OK)
         else:
             return Response({'error': _('Invalid OTP.')}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 
