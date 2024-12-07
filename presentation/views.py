@@ -25,34 +25,12 @@ from rest_framework.generics import ListCreateAPIView
 
 
 load_dotenv()
-api_key = os.getenv("OPENAI_KEY")
+api_key = os.getenv("OPENAI_API_KEY")
 UNSPLASH_ACCESS_KEY = config('UNSPLASH_ACCESS_KEY')
+api_key = config('OPENAI_API_KEY')
 
 client = OpenAI()
 
-
-
-
-# def get_unsplash_images(query, per_page=10):
-#     url = f"https://api.unsplash.com/search/photos"
-#     headers = {
-#         "Authorization": f"Client-ID {UNSPLASH_ACCESS_KEY}"
-#     }
-#     params = {
-#         "query": query,    # The search query term
-#         "per_page": per_page  # Number of results per page
-#     }
-    
-#     response = requests.get(url, headers=headers, params=params)
-    
-#     if response.status_code == 200:
-#         data = response.json()
-#         images = data['results']
-#         image_urls = [image['urls']['regular'] for image in images]
-#         return image_urls
-#     else:
-#         print(f"Error fetching images: {response.status_code}")
-#         return []
     
 def get_unsplash_images(query, per_page=10):
     url = "https://api.unsplash.com/search/photos"
@@ -87,52 +65,68 @@ def get_unsplash_images(query, per_page=10):
         return []
 
     
-def get_chatbot_response(user_input):
-    openai.api_key = api_key
-    prompt = f"following Guy kawasaki principles, generate a 10 page pitch deck with slides, titles and an explanatory robust content and convert them into a Json array with each item having a slide, title, content about: {user_input}. The title should only contain title text without naming what slide it is"
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo-0125",
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=1500,  # Increase the maximum number of tokens
-        temperature=0.7   # Set temperature for creativity
-        )
-    print(f'{response.usage.prompt_tokens} prompt tokens used.')
-    chatbot_response = response.choices[0].message.content
-    
-    if response.choices:
-        try:
-            return json.loads(chatbot_response)
-        except json.JSONDecodeError:
-            # Handle JSON decoding error if the response is not a valid JSON
-            return {"error": "Invalid JSON response"}
-    else:
-        return {"error": "No response from the model"}
-    
-
-# def openai_image_generation(user_input):
-#     openai.api_key = api_key
-#     prompt = {user_input}
-#     response = client.images.generate(
-#     model="dall-e-3",
-#     prompt="a white siamese cat",
-#     size="1024x1024",
-#     quality="standard",
-#     n=1,
-#     )
+# def get_chatbot_response(user_input):
+#     # openai.api_key = api_key
+#     # prompt = f"following Guy kawasaki principles, generate a 10 page pitch deck with slides, titles and an explanatory robust content and convert them into a JSON array with each item having a slide, title, content about: {user_input}. The title should only contain title text without naming what slide it is. Ensure the response is valid JSON."
+#     prompt = (
+#     "Following Guy Kawasaki principles, generate a 10-page pitch deck in JSON format about: {user_input}. "
+#     "Each item in the array should have 'slide', 'title', and 'content' fields. "
+#     "Ensure the response is valid JSON."
+# )
+#     response = client.chat.completions.create(
+#         model="gpt-3.5-turbo-0125",
+#         messages=[
+#             {"role": "user", "content": prompt}
+#         ],
+#         max_tokens=1000,  # Increase the maximum number of tokens
+#         temperature=0.5   # Set temperature for creativity
+#         )
 #     print(f'{response.usage.prompt_tokens} prompt tokens used.')
-#     image_url = response.data[0].url
+#     chatbot_response = response.choices[0].message.content
     
 #     if response.choices:
 #         try:
-#             return json.loads(image_url)
+#             return json.loads(chatbot_response)
 #         except json.JSONDecodeError:
 #             # Handle JSON decoding error if the response is not a valid JSON
 #             return {"error": "Invalid JSON response"}
 #     else:
 #         return {"error": "No response from the model"}
+
+def get_chatbot_response(user_input):
+    # Debugging: Print user input
+    # print(f"User input: {user_input}")
     
+    prompt = (
+        f"Following Guy Kawasaki principles, generate a 10-page pitch deck in JSON format with each item "
+        f"having 'slide', 'title', and 'content' about: {user_input}. The title should only contain title text and the content should be robust and well explanatory."
+        f"without naming what slide it is."
+    )
+    
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1000,  # Adjusted to allow larger responses
+            temperature=0.5
+        )
+        chatbot_response = response.choices[0].message.content
+        
+        # Debugging: Print raw chatbot response
+        # print(f"Raw chatbot response: {chatbot_response}")
+        # print(f'{response.usage.prompt_tokens} prompt tokens used.')
+        
+        # Attempt to parse JSON
+        return json.loads(chatbot_response)
+    except json.JSONDecodeError as e:
+        # Debugging: Print decoding error
+        print(f"JSON Decode Error: {e}")
+        return {"error": "Invalid JSON response"}
+    except Exception as e:
+        # Debugging: Print any other exceptions
+        print(f"Error: {e}")
+        return {"error": "Request failed"}
+   
 
 class GenerateSlidesAPIView(ListCreateAPIView):
     permission_classes = [AllowAny]
@@ -159,20 +153,26 @@ class GenerateSlidesAPIView(ListCreateAPIView):
             return Response({'error': 'user_input is required'}, status=status.HTTP_400_BAD_REQUEST)
         
         slides_content = get_chatbot_response(user_input)
+        # print(slides_content)
         
         if not slides_content:
             return Response({'error': 'Failed to generate slides content'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         combined_response = []
 
+        # Ensure slides_content points to the list under 'pitch_deck'
+        slides_content = slides_content.get('pitch_deck', [])
+
+        # Iterate through each slide in slides_content
         for slide in slides_content:
-            slide_content = slide.get('content', '')
-            image_urls = get_unsplash_images(slide_content, per_page=1)
-            slide['image_urls'] = image_urls
-            combined_response.append(slide)
+            slide_content = slide.get('content', '')  # Extract 'content' from the current slide
+            image_urls = get_unsplash_images(slide_content, per_page=1)  # Generate image URLs
+            slide['image_urls'] = image_urls  # Add the image URLs to the slide
+            combined_response.append(slide)  # Add the updated slide to the combined response
 
         zlide_data = {'presentation_data': combined_response}
-        
+
+                
         # If the user is authenticated, add the user ID to zlide_data
         if request.user.is_authenticated:
             zlide_data['user'] = request.user.id
